@@ -49,7 +49,7 @@ export class WorkersListComponent {
  
   ngOnInit() {
     this.workersService.workersList().pipe(
-      map((data: any) => data.map((worker: any) => ({ id: worker.id, name: worker.name })))
+      map((data: any) => data.map((item: any) => ({ id: item.id, name: item.name })))
     ).subscribe((workers: Worker[]) => {
       console.log(workers);
       this.workers = signal(workers);

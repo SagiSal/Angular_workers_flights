@@ -1,16 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Flight } from '../../models/flight.model';
 
 @Component({
   selector: 'app-flight',
   standalone: true,
   imports: [],
   template: `
-    <p>
-      flight works!
-    </p>
   `,
-  styles: ``
+  styles: `
+  `
 })
 export class FlightComponent {
+  @Input() flight!: Flight;
+  @Input() isSelected: boolean = false;
+  @Output() flightClicked = new EventEmitter<Flight>();
 
+
+  onClick() {
+    console.log(this.flight.flightNumber);
+    this.flightClicked.emit(this.flight);
+  }
+  
 }
