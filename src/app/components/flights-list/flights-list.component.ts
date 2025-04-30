@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Flight } from '../../models/flight.model';
 import { FlightsService } from '../../services/flights.service';
-import { FlightComponent } from "../flight/flight.component";
 import { DurationPipe } from "../../pipes/duration.pipe";
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-flights-list',
   standalone: true,
-  imports: [FlightComponent, DurationPipe, MatTableModule],
+  imports: [DurationPipe, MatTableModule],
   template: `
     <div class="flights-list-container">
       <div class="flights-list">
@@ -48,44 +47,36 @@ import { MatTableModule } from '@angular/material/table';
           <mat-header-row *matHeaderRowDef="['flightNumber', 'origin', 'originDate', 'destination', 'destinationDate']"></mat-header-row>
           <mat-row *matRowDef="let row; columns: ['flightNumber', 'origin', 'originDate', 'destination', 'destinationDate']"
             (click)="selectFlight(row)"
-            [style.background-color]="row === selectedFlight ? 'lightgrey' : '#fff'">
+            [style.background-color]="row === selectedFlight ? 'lightgrey' : '#fff'"
+            [style.cursor]="'pointer'"
+            (mouseenter)="row.hover = true"
+            (mouseleave)="row.hover = false"
+            [style.background-color]="row.hover ? '#f0f0f0' : (row === selectedFlight ? 'lightgrey' : '#fff')">
           </mat-row>
         
         </mat-table>
       </div>
-        <div class="flight-details">
-          <h4>Flight Details</h4>
-          <mat-table [dataSource]="[selectedFlight]" class="mat-elevation-z8">
-
-        <!-- Plane Number Column -->
-        <ng-container matColumnDef="planeNumber">
-          <mat-header-cell *matHeaderCellDef> Plane Number </mat-header-cell>
-          <mat-cell *matCellDef="let flight"> {{ flight?.planeNumber }} </mat-cell>
-        </ng-container>
-        
-        <!-- Duration Column -->
-        <ng-container matColumnDef="duration">
-          <mat-header-cell *matHeaderCellDef> Duration </mat-header-cell>
-          <mat-cell *matCellDef="let flight"> {{ flight?.duration | duration }} </mat-cell>
-        </ng-container>
-        
-        <!-- Origin Gate Column -->
-        <ng-container matColumnDef="originGate">
-          <mat-header-cell *matHeaderCellDef> Origin Gate </mat-header-cell>
-          <mat-cell *matCellDef="let flight"> {{ flight?.originGate }} </mat-cell>
-        </ng-container>
-        
-        <!-- Destination Gate Column -->
-        <ng-container matColumnDef="destinationGate">
-          <mat-header-cell *matHeaderCellDef> Destination Gate </mat-header-cell>
-          <mat-cell *matCellDef="let flight"> {{ flight?.destinationGate }} </mat-cell>
-        </ng-container>
-        
-        <mat-header-row *matHeaderRowDef="['planeNumber', 'duration', 'originGate', 'destinationGate']"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: ['planeNumber', 'duration', 'originGate', 'destinationGate']"></mat-row>
-        
-          </mat-table>
-      </div>
+      <div class="flight-details">
+      <h4>Flight Details</h4>
+      <table>
+        <tr>
+          <td class="label">Plane Number:</td>
+          <td class="value">{{ selectedFlight?.planeNumber }}</td>
+        </tr>
+        <tr>
+          <td class="label">Duration:</td>
+          <td class="value">{{ selectedFlight?.duration | duration }}</td>
+        </tr>
+        <tr>
+          <td class="label">Origin Gate:</td>
+          <td class="value">{{ selectedFlight?.originGate }}</td>
+        </tr>
+        <tr>
+          <td class="label">Destination Gate:</td>
+          <td class="value">{{ selectedFlight?.destinationGate }}</td>
+        </tr>
+      </table>
+    </div>
     </div>
   `,
   styles: `
@@ -96,37 +87,34 @@ import { MatTableModule } from '@angular/material/table';
   .flights-list {
     width: 75%;
     text-align: center;
-    
+    border: 1px solid #000;
   }
   .flight-details {
     float: right;
     width: 25%;
-  }
-  div {
     border: 1px solid #000;
+  }
+  .flight-details td.label {
+    text-align: left;
+    padding-left: 10px;
+    font-weight: bold;
+  }
+  .flight-details td.value {
+    text-align: right;
+    padding-right: 10px;
   }
   h4 {
     text-align: center;
     background-color: lightblue;
     padding: 10px;
-  }
-  th {
-    margin : 20px;
-    padding : 20px;
-  }
-  td {
-    text-align : center;
-    margin : 10px;
-    padding : 10px;
+    margin: 10px;
   }
   table {
     border-collapse: collapse;
+    width: 100%;
   }
   tr:nth-child(even) {
     background-color: #f2f2f2;
-  }
-  tr:hover {
-    background-color: #ddd;
   }
   `
 })
@@ -144,7 +132,6 @@ export class FlightsListComponent implements OnChanges {
   selectedFlight: Flight | null = null;
 
   @Input() workerId!: number | null;
-  @Output() flightSelected = new EventEmitter<Flight>();
 
   private loadFlights(id: number) {
     this.flightsService.flightsList(id).subscribe((flights: Flight[]) => {

@@ -18,7 +18,8 @@ import { Worker } from '../../models/worker.model';
     list-style: none;
     text-align: left;
     cursor: pointer; 
-    margin-right: 15px;
+    margin-right: 25px;
+    margin: 5px;
   }`
 })
 export class WorkerComponent {
