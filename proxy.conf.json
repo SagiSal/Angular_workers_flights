@@ -1,0 +1,15 @@
+{
+    "/workers": {
+      "target": "http://128.24.65.53:3000",
+      "changeOrigin": true,
+      "secure": false,
+      "logLevel": "debug"
+    },
+    "/flights": {
+      "target": "http://128.24.65.53:3000",
+      "changeOrigin": true,
+      "secure": false,
+      "logLevel": "debug"
+    }
+
+}
