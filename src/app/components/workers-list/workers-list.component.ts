@@ -12,29 +12,39 @@ import { FlightsListComponent } from "../flights-list/flights-list.component";
   standalone: true,
   imports: [CommonModule, WorkerComponent, FlightsListComponent],
   template: `
-  <div style="display: inline-block; vertical-align: top; gap: 2rem width: 30% float: left">
-    <h3>Workers</h3>
-    <ul>
-      @for(worker of workers(); track worker.name) { 
-        <app-worker
-        [worker]="worker"
-        [isSelected]="worker === selectedWorker"
-        (workerClicked)="selectWorker($event)">
-          {{ worker.name }}
-        </app-worker>
-      }
-    </ul>
+  <div style="display: flex; width: 100%">
+    <div class="workers-list">
+      <h3>Workers</h3>
+      <ul>
+        @for(worker of workers(); track worker.name) { 
+          <app-worker
+          [worker]="worker"
+          [isSelected]="worker === selectedWorker"
+          (workerClicked)="selectWorker($event)">
+            {{ worker.name }}
+          </app-worker>
+        }
+      </ul>
+    </div>
+    <app-flights-list class="flights-list" [workerId]="selectedWorkerId"></app-flights-list>
   </div>
-  <app-flights-list [workerId]="selectedWorkerId"></app-flights-list>
   `,
   styles: `
-  div {
+  .workers-list {
+    width: 15%;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
     border: 1px solid #000;
   }
+  .flights-list {
+    display: block;
+    width: 85%;
+    box-sizing: border-box;
+  }
   h3 {
-    text-align: center;
     color: #fff;
-    background-color: lightblue;
+    background-color: blue;
     padding: 10px;
   }`
 })
