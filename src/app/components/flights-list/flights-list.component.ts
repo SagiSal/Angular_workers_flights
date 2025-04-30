@@ -2,13 +2,14 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { Flight } from '../../models/flight.model';
 import { FlightsService } from '../../services/flights.service';
 import { FlightComponent } from "../flight/flight.component";
+import { DurationPipe } from "../../pipes/duration.pipe";
 
 @Component({
   selector: 'app-flights-list',
   standalone: true,
-  imports: [FlightComponent],
+  imports: [FlightComponent, DurationPipe],
   template: `
-    <div style="display: inline-block; vertical-align: top; margin-left:30px; gap: 2rem width: 50% float: right">
+    <div style="display: inline-block; vertical-align: top; margin-left:30px; gap: 2rem width: 70% float: right">
       <h4>Flights List</h4>
       <table>
         <tr>
@@ -35,8 +36,25 @@ import { FlightComponent } from "../flight/flight.component";
         }
       </table>
     </div>
+    <div class="flight-details">
+      <h4>Flight Details</h4>
+      <table>
+        <tr><td>Plane Number:</td><td>{{ selectedFlight?.planeNumber }}</td></tr>
+        <tr><td>Duration:</td><td>{{ selectedFlight?.duration | duration }}</td></tr>
+        <tr><td>Origin Gate:</td><td>{{ selectedFlight?.originGate }}</td></tr>
+        <tr><td>Destination Gate:</td><td>{{ selectedFlight?.destinationGate }}</td></tr>
+      </table>
+    </div>
   `,
   styles: `
+  .flight-details {
+    display: inline-block;
+    vertical-align: top;
+    //margin-left: 30px;
+    gap: 2rem;
+    width: 25%;
+    float: right;
+  }
   div {
     border: 1px solid #000;
   }
